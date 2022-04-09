@@ -11,22 +11,22 @@ module Kapsule
 
     abstract!
 
-    @properties = T.let({}, T::Hash[Symbol, Class])
+    @property_definitions = T.let({}, T::Hash[Symbol, Class])
 
     class << self
       extend T::Sig
       sig { returns(T::Hash[Symbol, Class]) }
-      attr_reader :properties
+      attr_reader :property_definitions
 
       sig { params(base: Class).void }
       def inherited(base)
-        base.instance_variable_set(:@properties, {})
+        base.instance_variable_set(:@property_definitions, {})
         super
       end
 
       sig { params(name: Symbol, type: Class).void }
       def property(name, type)
-        @properties[name] = type
+        @property_definitions[name] = type
       end
     end
 

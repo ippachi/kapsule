@@ -22,7 +22,7 @@ module Kapsule
           def decorate
             root.create_path(constant) do
               create_entity_class do |klass|
-                constant.properties.each do |name, type|
+                constant.property_definitions.each do |name, type|
                   klass.create_method(name.to_s, return_type: type.to_s)
                   klass.create_method("#{name}=", parameters: [create_param("value", type: type.to_s)],
                                                   return_type: type.to_s)
