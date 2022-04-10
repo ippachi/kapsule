@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/ippachi/kapsule/branch/main/graph/badge.svg?token=00EP8GS1VA)](https://codecov.io/gh/ippachi/kapsule)
+
 # Kapsule
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/kapsule`. To experiment with that code, run `bin/console` for an interactive prompt.
