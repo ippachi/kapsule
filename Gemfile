@@ -15,7 +15,9 @@ gem "rubocop-rake"
 gem "sorbet"
 gem "tapioca"
 
+gem "simplecov"
+gem "simplecov-cobertura"
+
 gem "debug"
 gem "minitest"
-gem "simplecov", require: false
 gem "warning"
