@@ -9,9 +9,12 @@ gem "rake"
 gem "test-unit"
 
 gem "rubocop"
+gem "rubocop-minitest"
 gem "rubocop-rake"
 
 gem "sorbet"
 gem "tapioca"
 
 gem "debug"
+gem "minitest"
+gem "warning"

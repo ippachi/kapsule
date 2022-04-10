@@ -1239,6 +1239,123 @@ end
 
 Tapioca::Gemfile::GemSpec::IGNORED_GEMS = T.let(T.unsafe(nil), Array)
 Tapioca::Gemfile::Spec = T.type_alias { T.any(::Bundler::StubSpecification, ::Gem::Specification) }
+module Tapioca::Helpers; end
+module Tapioca::Helpers::Test; end
+
+module Tapioca::Helpers::Test::Content
+  requires_ancestor { Kernel }
+
+  sig { params(name: ::String, content: ::String).returns(::String) }
+  def add_content_file(name, content); end
+
+  sig { params(name: ::String, content: ::String, require_file: T::Boolean).returns(::String) }
+  def add_ruby_file(name, content, require_file: T.unsafe(nil)); end
+
+  sig { void }
+  def remove_tmp_path; end
+
+  sig { void }
+  def teardown; end
+
+  sig { params(args: ::String).returns(::String) }
+  def tmp_path(*args); end
+end
+
+module Tapioca::Helpers::Test::DslCompiler
+  include ::Tapioca::Helpers::Test::Isolation::Forking
+  include ::Tapioca::Helpers::Test::Isolation
+  include ::Tapioca::Helpers::Test::Content
+  include ::Tapioca::Helpers::Test::Template
+
+  requires_ancestor { Kernel }
+
+  sig { params(compiler_classes: T.class_of(Tapioca::Dsl::Compiler)).void }
+  def activate_other_dsl_compilers(*compiler_classes); end
+
+  sig { returns(::Tapioca::Helpers::Test::DslCompiler::CompilerContext) }
+  def context; end
+
+  sig { returns(T::Array[::String]) }
+  def gathered_constants; end
+
+  sig { returns(T::Array[::String]) }
+  def generated_errors; end
+
+  sig { params(constant_name: T.any(::String, ::Symbol)).returns(::String) }
+  def rbi_for(constant_name); end
+
+  sig { params(compiler_class: T.class_of(Tapioca::Dsl::Compiler)).void }
+  def use_dsl_compiler(compiler_class); end
+end
+
+class Tapioca::Helpers::Test::DslCompiler::CompilerContext
+  sig { params(compiler_class: T.class_of(Tapioca::Dsl::Compiler)).void }
+  def initialize(compiler_class); end
+
+  sig { params(compiler_classes: T::Array[T.class_of(Tapioca::Dsl::Compiler)]).void }
+  def activate_other_dsl_compilers(compiler_classes); end
+
+  sig { returns(T::Array[T.class_of(Tapioca::Dsl::Compiler)]) }
+  def activated_compiler_classes; end
+
+  sig { returns(T.class_of(Tapioca::Dsl::Compiler)) }
+  def compiler_class; end
+
+  sig { returns(T::Array[::String]) }
+  def errors; end
+
+  sig { returns(T::Array[::String]) }
+  def gathered_constants; end
+
+  sig { returns(T::Array[T.class_of(Tapioca::Dsl::Compiler)]) }
+  def other_compiler_classes; end
+
+  sig { params(constant_name: T.any(::String, ::Symbol)).returns(::String) }
+  def rbi_for(constant_name); end
+
+  private
+
+  sig { returns(::Tapioca::Dsl::Pipeline) }
+  def pipeline; end
+end
+
+module Tapioca::Helpers::Test::Isolation
+  include ::Tapioca::Helpers::Test::Isolation::Forking
+
+  def run; end
+
+  class << self
+    sig { returns(T::Boolean) }
+    def forking_env?; end
+  end
+end
+
+module Tapioca::Helpers::Test::Isolation::Forking
+  sig { params(_blk: T.untyped).returns(::String) }
+  def run_in_isolation(&_blk); end
+end
+
+module Tapioca::Helpers::Test::Isolation::Subprocess
+  sig { params(_blk: T.untyped).returns(::String) }
+  def run_in_isolation(&_blk); end
+end
+
+Tapioca::Helpers::Test::Isolation::Subprocess::ORIG_ARGV = T.let(T.unsafe(nil), Array)
+
+module Tapioca::Helpers::Test::Template
+  requires_ancestor { Kernel }
+
+  sig { params(str: ::String, indent: ::Integer).returns(::String) }
+  def indented(str, indent); end
+
+  sig { params(selector: ::String).returns(T::Boolean) }
+  def ruby_version(selector); end
+
+  sig { params(src: ::String).returns(::String) }
+  def template(src); end
+end
+
+Tapioca::Helpers::Test::Template::ERB_SUPPORTS_KVARGS = T.let(T.unsafe(nil), Array)
 
 class Tapioca::RBIFormatter < ::RBI::Formatter
   sig { params(file: ::RBI::File).void }

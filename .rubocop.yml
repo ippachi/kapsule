@@ -1,4 +1,6 @@
-require: rubocop-rake
+require:
+  - rubocop-rake
+  - rubocop-minitest
 
 AllCops:
   TargetRubyVersion: 2.7
@@ -17,3 +19,6 @@ Layout/LineLength:
 
 Style/Documentation:
   Enabled: false
+
+Metrics/BlockLength:
+  CountAsOne: ['heredoc']

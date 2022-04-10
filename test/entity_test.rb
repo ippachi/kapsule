@@ -3,7 +3,6 @@
 # typed: true
 
 require "test_helper"
-require_relative "./fixtures/user"
 
 module Kapsule
   class EntityTest < Test::Unit::TestCase
