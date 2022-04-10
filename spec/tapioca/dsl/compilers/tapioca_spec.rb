@@ -43,6 +43,7 @@ module Kapsule
                 add_ruby_file("conversation.rb", <<~RUBY)
                   class User < Kapsule::Entity
                     property :name, String
+                    property :email, String
                   end
                 RUBY
 
@@ -54,12 +55,21 @@ module Kapsule
                     def initialize(attributes); end
 
                     sig { returns(String) }
+                    def email; end
+
+                    sig { params(value: String).returns(String) }
+                    def email=(value); end
+
+                    sig { returns(String) }
                     def name; end
 
                     sig { params(value: String).returns(String) }
                     def name=(value); end
 
-                    Attributes = T.type_alias { {:name=>String} }
+                    sig { returns(Attributes) }
+                    def serialize; end
+
+                    Attributes = T.type_alias { {:name=>String, :email=>String} }
                   end
                 RBI
                 assert_equal(expected, rbi_for(:User))

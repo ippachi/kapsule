@@ -44,6 +44,7 @@ module Kapsule
             klass.create_constant("Attributes", value: "T.type_alias { #{constant.property_definitions} }")
             klass.create_method("initialize", parameters: [create_param("attributes", type: "Attributes")],
                                               return_type: "void")
+            klass.create_method("serialize", return_type: "Attributes")
             constant.property_definitions.each do |name, type|
               klass.create_method(name.to_s, return_type: type.to_s)
               klass.create_method("#{name}=", parameters: [create_param("value", type: type.to_s)],
