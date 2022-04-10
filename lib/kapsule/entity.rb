@@ -27,10 +27,23 @@ module Kapsule
       sig { params(name: Symbol, type: Class).void }
       def property(name, type)
         @property_definitions[name] = type
+        define_method(name) { instance_variable_get("@#{name}") }
+        define_method("#{name}=") { |v| instance_variable_set("@#{name}", v) }
       end
     end
 
     sig { params(properties: T.untyped).void }
-    def initialize(**properties); end
+    def initialize(**properties)
+      self.class.property_definitions.each do |name, _type|
+        __send__(:"#{name}=", properties[name])
+      end
+    end
+
+    sig { returns(T::Hash[Symbol, T.untyped]) }
+    def serialize
+      self.class.property_definitions.each_with_object({}) do |(name, _type), result|
+        result[name.to_sym] = __send__(name.to_sym)
+      end
+    end
   end
 end
