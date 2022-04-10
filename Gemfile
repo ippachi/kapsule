@@ -17,5 +17,5 @@ gem "tapioca"
 
 gem "debug"
 gem "minitest"
-gem "simplecov"
+gem "simplecov", require: false
 gem "warning"
