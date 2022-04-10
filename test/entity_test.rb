@@ -20,20 +20,24 @@ module Kapsule
 
     def test_initialize
       assert_nothing_raised do
-        target_class.new
+        target_class.new(name: "name", email: "email")
       end
     end
 
-    class PropertyTest < self
-      def test_add_property_definitions
-        assert_equal String, target_class.property_definitions[:name]
+    def test_initialize_with_invalid_argument_type
+      assert_raises TypeError do
+        target_class.new(name: 1, email: "email")
       end
+    end
 
-      def test_initialize
-        assert_nothing_raised do
-          target_class.new(name: "name", email: "email")
-        end
+    def test_initialize_with_not_enough_argument
+      assert_raises TypeError do
+        target_class.new(name: "name")
       end
+    end
+
+    def test_property_add_property_definitions
+      assert_equal String, target_class.property_definitions[:name]
     end
 
     def test_serialize
