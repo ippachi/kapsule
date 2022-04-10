@@ -22,11 +22,7 @@ module Kapsule
           def decorate
             root.create_path(constant) do
               create_entity_class do |klass|
-                constant.property_definitions.each do |name, type|
-                  klass.create_method(name.to_s, return_type: type.to_s)
-                  klass.create_method("#{name}=", parameters: [create_param("value", type: type.to_s)],
-                                                  return_type: type.to_s)
-                end
+                create_entity_definition(klass)
               end
             end
           end
@@ -38,11 +34,21 @@ module Kapsule
 
           private
 
-          sig do
-            params(blk: T.nilable(T.proc.params(arg0: RBI::Scope).void)).returns(RBI::Scope)
-          end
+          sig { params(blk: T.nilable(T.proc.params(arg0: RBI::Scope).void)).returns(RBI::Scope) }
           def create_entity_class(&blk)
             root.create_class(constant.name.to_s, superclass_name: constant.superclass.to_s, &blk)
+          end
+
+          sig { params(klass: RBI::Scope).void }
+          def create_entity_definition(klass)
+            klass.create_constant("Attributes", value: "T.type_alias { #{constant.property_definitions} }")
+            klass.create_method("initialize", parameters: [create_param("attributes", type: "Attributes")],
+                                              return_type: "void")
+            constant.property_definitions.each do |name, type|
+              klass.create_method(name.to_s, return_type: type.to_s)
+              klass.create_method("#{name}=", parameters: [create_param("value", type: type.to_s)],
+                                              return_type: type.to_s)
+            end
           end
         end
       end

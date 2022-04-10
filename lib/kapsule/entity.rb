@@ -33,7 +33,7 @@ module Kapsule
     end
 
     sig { params(properties: T.untyped).void }
-    def initialize(**properties)
+    def initialize(properties = {})
       self.class.property_definitions.each do |name, _type|
         __send__(:"#{name}=", properties[name])
       end

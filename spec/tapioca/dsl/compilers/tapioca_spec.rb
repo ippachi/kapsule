@@ -50,11 +50,16 @@ module Kapsule
                   # typed: strong
 
                   class User
+                    sig { params(attributes: Attributes).void }
+                    def initialize(attributes); end
+
                     sig { returns(String) }
                     def name; end
 
                     sig { params(value: String).returns(String) }
                     def name=(value); end
+
+                    Attributes = T.type_alias { {:name=>String} }
                   end
                 RBI
                 assert_equal(expected, rbi_for(:User))
